@@ -14,15 +14,20 @@ def unstable_walls(walls: np.ndarray, terrain: np.ndarray, threshold: int = MUD)
 
     #------------------------------------------ YOUR CODE GOES HERE ------------------------------------------
     # Question 2a
-    
-    return -1
+    sum = 0
+    for x in walls:
+        for y in x:
+            if(y != EMPTY):
+                if(terrain[x][y] == MUD or terrain[x][y] == DIRT):
+                    sum += 1
+    return sum
     #---------------------------------------------------------------------------------------------------------
 
 def leak_territory(walls: np.ndarray, leak_origin: tuple[int] = LEAK_ORIGIN) -> int:
 
     #------------------------------------------ YOUR CODE GOES HERE ------------------------------------------
     # Question 2b
-
+    
     return -1
     #---------------------------------------------------------------------------------------------------------
 
