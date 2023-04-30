@@ -1,5 +1,7 @@
 import numpy as np
 from pathlib import Path
+from collections import deque
+
 
 EXPECTED_FILE_NAMES = ['walls', 'terrain']
 CSV_SUFFIX = '.csv'
@@ -7,28 +9,89 @@ CSV_DIR = 'csvs'
 
 EMPTY, DRYWALL, WOOD, STONE = [0, 1, 2, 3]
 MUD, DIRT, STONE, BEDROCK = [0, 1, 2, 3]
+FILLED = 8
 
-LEAK_ORIGIN = (6, 5)
+LEAK_ORIGIN = (8, 8)
 
 def unstable_walls(walls: np.ndarray, terrain: np.ndarray, threshold: int = MUD) -> int:
 
     #------------------------------------------ YOUR CODE GOES HERE ------------------------------------------
     # Question 2a
     sum = 0
-    for x in walls:
-        for y in x:
-            if(y != EMPTY):
-                if(terrain[x][y] == MUD or terrain[x][y] == DIRT):
-                    sum += 1
+    for x1, x2 in zip(walls, terrain):
+        #print("walls:",x1, "terrain:", x2, end = "")
+        #curr = 0
+        for y1, y2 in zip(x1, x2):
+            if(y1 != 0):
+                if(y2 <= threshold):
+                    sum += 1;
+                    #curr += 1;
+        #print(" unstable for this row: ", curr, "total sum: ", sum)
     return sum
     #---------------------------------------------------------------------------------------------------------
+def add_adjacent_spaces(stack: deque(), walls: np.ndarray) -> int:
+    (x_max, y_max) = walls.shape
+    sum = 0
+    (r, c) = stack.pop()
+    walls[(r, c)] = FILLED
+    #fill in: NORTH, EAST, SOUTH, WEST adjacent spots
+    if(r+1 < x_max and walls[(r+1, c)] == 0):
+        walls[(r+1, c)] = FILLED
+        stack.append((r+1, c))
+        sum += 1
+    if(r-1 >= 0 and walls[(r-1, c)] == 0):
+        walls[(r-1, c)] = FILLED
+        stack.append((r-1, c))
+        sum += 1
+    if(c+1 < y_max and walls[(r, c+1)] == 0):
+        walls[(r, c+1)] = FILLED
+        stack.append((r, c+1))
+        sum += 1
+    if(c-1 >= 0 and walls[(r, c-1)] == 0):
+        walls[(r, c-1)] = FILLED
+        stack.append((r, c-1))
+        sum += 1
+    return sum
+
+#replaced_with is a helper method that replaces a certain value in a given 2d array with a new value, 
+#then returns the number of elements changed
+def replace_with(walls: np.ndarray, to_replace: int, replacement: int) -> int:
+    i, j = walls.shape
+    sum = 0
+    for x in range(i):
+        for y in range(j):
+            if(walls[(x, y)] == to_replace):
+                walls[(x, y)] = replacement
+                sum += 1
+    return sum
 
 def leak_territory(walls: np.ndarray, leak_origin: tuple[int] = LEAK_ORIGIN) -> int:
 
     #------------------------------------------ YOUR CODE GOES HERE ------------------------------------------
     # Question 2b
-    
-    return -1
+    (x_max, y_max) = walls.shape
+    #print("xmax = ", x_max, "Y max = ", y_max)
+    sum = 1
+    stack = deque()
+    stack.append(LEAK_ORIGIN)
+    #print(" part 1 this is contents of ur stack: ",stack)
+
+    while(len(stack) > 0):
+        sum += add_adjacent_spaces(stack, walls)
+        #print("this is contents of ur stack: ",stack)
+
+    #(r, c) = LEAK_ORIGIN
+    #To show the filled area
+    #for x1 in walls:
+    #    print("walls:",x1)
+
+    #unfill the area
+    replace_with(walls, FILLED, EMPTY);
+
+    #print("double check the unfill:")
+    #for x1 in walls:
+    #    print("walls:",x1)
+    return sum
     #---------------------------------------------------------------------------------------------------------
 
 def validate_env(csv_dir: Path):
