@@ -36,19 +36,19 @@ def add_adjacent_spaces(stack: deque(), walls: np.ndarray) -> int:
     (r, c) = stack.pop()
     walls[(r, c)] = FILLED
     #fill in: NORTH, EAST, SOUTH, WEST adjacent spots
-    if(r+1 < x_max and walls[(r+1, c)] == 0):
+    if(r+1 < x_max and walls[(r+1, c)] == EMPTY:
         walls[(r+1, c)] = FILLED
         stack.append((r+1, c))
         sum += 1
-    if(r-1 >= 0 and walls[(r-1, c)] == 0):
+    if(r-1 >= 0 and walls[(r-1, c)] == EMPTY):
         walls[(r-1, c)] = FILLED
         stack.append((r-1, c))
         sum += 1
-    if(c+1 < y_max and walls[(r, c+1)] == 0):
+    if(c+1 < y_max and walls[(r, c+1)] == EMPTY):
         walls[(r, c+1)] = FILLED
         stack.append((r, c+1))
         sum += 1
-    if(c-1 >= 0 and walls[(r, c-1)] == 0):
+    if(c-1 >= 0 and walls[(r, c-1)] == EMPTY):
         walls[(r, c-1)] = FILLED
         stack.append((r, c-1))
         sum += 1
