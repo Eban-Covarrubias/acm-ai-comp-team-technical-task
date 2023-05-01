@@ -12,6 +12,7 @@ MUD, DIRT, STONE, BEDROCK = [0, 1, 2, 3]
 FILLED = 8
 
 LEAK_ORIGIN = (8, 8)
+MIDDLE_OF_CIRCLE = (4, 4)
 
 def unstable_walls(walls: np.ndarray, terrain: np.ndarray, threshold: int = MUD) -> int:
 
@@ -71,9 +72,13 @@ def leak_territory(walls: np.ndarray, leak_origin: tuple[int] = LEAK_ORIGIN) -> 
     # Question 2b
     (x_max, y_max) = walls.shape
     #print("xmax = ", x_max, "Y max = ", y_max)
+    #start of sum is 1 for the LEAK_ORIGIN
     sum = 1
     stack = deque()
-    stack.append(LEAK_ORIGIN)
+    #leaks should only happen where there is not a wall
+    if(walls[(leak_origin)] != EMPTY):
+        return 0
+    stack.append(leak_origin)
     #print(" part 1 this is contents of ur stack: ",stack)
 
     while(len(stack) > 0):
@@ -111,12 +116,24 @@ def main():
 
     WALLS = np.loadtxt(CSV_DIR / Path('walls.csv'), delimiter=',').astype(np.int8)
     TERRAIN = np.loadtxt(CSV_DIR / Path('terrain.csv'), delimiter=',').astype(np.int8)
+    WALLS_GONE_TEST = np.loadtxt(CSV_DIR / Path('wall_test.csv'), delimiter=',').astype(np.int8)
+    WALLS_IN_CIRCLE_TEST = np.loadtxt(CSV_DIR / Path('walls_test2.csv'), delimiter=',').astype(np.int8)
 
     # Q2a result printed here
     print('unstable_walls:', unstable_walls(np.copy(WALLS), np.copy(TERRAIN), threshold=DIRT))
 
     # Q2b result printed here
     print('leak_territory:', leak_territory(np.copy(WALLS), leak_origin=LEAK_ORIGIN))
+
+    #Testing Q2b
+    print('leak_territory_test1, expected output of : 100, actual output of :', leak_territory(np.copy(WALLS_GONE_TEST), leak_origin=LEAK_ORIGIN))
+
+    #Testing Q2b
+    print('leak_territory_test2, expected output of : 9, actual output of : ', leak_territory(np.copy(WALLS_IN_CIRCLE_TEST), leak_origin=MIDDLE_OF_CIRCLE))
+    
+    #Testing Q2b
+    print('leak_territory_test2, expected output of : 79, actual output of : ', leak_territory(np.copy(WALLS_IN_CIRCLE_TEST), leak_origin=LEAK_ORIGIN))
+
 
 if __name__ == '__main__':
     main()
