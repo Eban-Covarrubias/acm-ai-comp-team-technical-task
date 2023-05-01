@@ -13,6 +13,7 @@ FILLED = 8
 
 LEAK_ORIGIN = (8, 8)
 MIDDLE_OF_CIRCLE = (4, 4)
+ON_WALL = (6, 4)
 
 def unstable_walls(walls: np.ndarray, terrain: np.ndarray, threshold: int = MUD) -> int:
 
@@ -120,6 +121,7 @@ def main():
 
     WALLS_GONE_TEST = np.loadtxt(CSV_DIR / Path('wall_test.csv'), delimiter=',').astype(np.int8)
     WALLS_IN_CIRCLE_TEST = np.loadtxt(CSV_DIR / Path('walls_test2.csv'), delimiter=',').astype(np.int8)
+    WALLS_ONE_ONLY_TEST = np.loadtxt(CSV_DIR / Path('walls_one_only.csv'), delimiter=',').astype(np.int8)
 
     # Q2a result printed here
     print('unstable_walls:', unstable_walls(np.copy(WALLS), np.copy(TERRAIN), threshold=DIRT))
@@ -143,14 +145,19 @@ def main():
     print('leak_territory:', leak_territory(np.copy(WALLS), leak_origin=LEAK_ORIGIN))
 
     #Testing Q2b
-    print('leak_territory_test1, expected output of : 100, actual output of :', leak_territory(np.copy(WALLS_GONE_TEST), leak_origin=LEAK_ORIGIN))
+    print('leak_territory, expected output of : 100, actual output of :', leak_territory(np.copy(WALLS_GONE_TEST), leak_origin=LEAK_ORIGIN))
 
     #Testing Q2b
-    print('leak_territory_test2, expected output of : 9, actual output of : ', leak_territory(np.copy(WALLS_IN_CIRCLE_TEST), leak_origin=MIDDLE_OF_CIRCLE))
+    print('leak_territory, expected output of : 9, actual output of : ', leak_territory(np.copy(WALLS_IN_CIRCLE_TEST), leak_origin=MIDDLE_OF_CIRCLE))
     
     #Testing Q2b
-    print('leak_territory_test2, expected output of : 79, actual output of : ', leak_territory(np.copy(WALLS_IN_CIRCLE_TEST), leak_origin=LEAK_ORIGIN))
+    print('leak_territory, expected output of : 79, actual output of : ', leak_territory(np.copy(WALLS_IN_CIRCLE_TEST), leak_origin=LEAK_ORIGIN))
 
+    #Testing Q2b
+    print('leak_territory, expected output of 0, actual output of : ', leak_territory(np.copy(WALLS_IN_CIRCLE_TEST), leak_origin=ON_WALL))
+
+    #Testing Q2b
+    print('leak_territory, expected output of 99, actual output of : ', leak_territory(np.copy(WALLS_ONE_ONLY_TEST), leak_origin=LEAK_ORIGIN))
 
 if __name__ == '__main__':
     main()
