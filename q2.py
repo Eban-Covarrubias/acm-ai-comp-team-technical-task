@@ -36,7 +36,7 @@ def add_adjacent_spaces(stack: deque(), walls: np.ndarray) -> int:
     (r, c) = stack.pop()
     walls[(r, c)] = FILLED
     #fill in: NORTH, EAST, SOUTH, WEST adjacent spots
-    if(r+1 < x_max and walls[(r+1, c)] == EMPTY:
+    if(r+1 < x_max and walls[(r+1, c)] == EMPTY):
         walls[(r+1, c)] = FILLED
         stack.append((r+1, c))
         sum += 1
@@ -116,11 +116,28 @@ def main():
 
     WALLS = np.loadtxt(CSV_DIR / Path('walls.csv'), delimiter=',').astype(np.int8)
     TERRAIN = np.loadtxt(CSV_DIR / Path('terrain.csv'), delimiter=',').astype(np.int8)
+    TERRAIN_MUD = np.loadtxt(CSV_DIR / Path('terrain_mud.csv'), delimiter=',').astype(np.int8)
+
     WALLS_GONE_TEST = np.loadtxt(CSV_DIR / Path('wall_test.csv'), delimiter=',').astype(np.int8)
     WALLS_IN_CIRCLE_TEST = np.loadtxt(CSV_DIR / Path('walls_test2.csv'), delimiter=',').astype(np.int8)
 
     # Q2a result printed here
     print('unstable_walls:', unstable_walls(np.copy(WALLS), np.copy(TERRAIN), threshold=DIRT))
+
+    #Testing Q2a
+    print('unstable_walls, expected output of : 0, actual output of : ', unstable_walls(np.copy(WALLS_GONE_TEST), np.copy(TERRAIN), threshold = DIRT))
+
+    #Testing Q2a
+    print('unstable_walls, expected output of : 12, actual output of : ', unstable_walls(np.copy(WALLS_IN_CIRCLE_TEST), np.copy(TERRAIN_MUD), threshold = DIRT))
+
+    #Testing Q2a
+    print('unstable_walls, expected output of : 12, actual output of : ', unstable_walls(np.copy(WALLS_IN_CIRCLE_TEST), np.copy(TERRAIN_MUD)))
+
+    #Testing Q2a
+    print('unstable_walls, expected output of : 7, actual output of : ', unstable_walls(np.copy(WALLS_IN_CIRCLE_TEST), np.copy(TERRAIN), threshold = DIRT))
+
+
+
 
     # Q2b result printed here
     print('leak_territory:', leak_territory(np.copy(WALLS), leak_origin=LEAK_ORIGIN))
