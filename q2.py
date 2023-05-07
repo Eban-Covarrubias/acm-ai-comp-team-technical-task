@@ -8,10 +8,10 @@ CSV_SUFFIX = '.csv'
 CSV_DIR = 'csvs'
 
 EMPTY, DRYWALL, WOOD, STONE = [0, 1, 2, 3]
-MUD, DIRT, STONE, BEDROCK = [0, 1, 2, 3]
+MUD, DIRT, ROCK, BEDROCK = [0, 1, 2, 3]
 FILLED = 8
 
-LEAK_ORIGIN = (8, 8)
+LEAK_ORIGIN = (0, 0)
 MIDDLE_OF_CIRCLE = (4, 4)
 ON_WALL = (6, 4)
 
@@ -24,11 +24,13 @@ def unstable_walls(walls: np.ndarray, terrain: np.ndarray, threshold: int = MUD)
         #print("walls:",x1, "terrain:", x2, end = "")
         #curr = 0
         for y1, y2 in zip(x1, x2):
-            if(y1 != 0):
+            if(y1 != EMPTY):
                 if(y2 <= threshold):
                     sum += 1;
                     #curr += 1;
         #print(" unstable for this row: ", curr, "total sum: ", sum)
+
+    print(walls == STONE)
     return sum
     #---------------------------------------------------------------------------------------------------------
 def add_adjacent_spaces(stack: deque(), walls: np.ndarray) -> int:

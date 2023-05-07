@@ -21,10 +21,14 @@ def main():
     # TODO: replace this code with your multiprocessed version
     start_time = time.time()
     with Pool(5) as p:
-        print(p.map(hash, WORDS))
+        #print(p.map(hash, WORDS))
+        for e in p.map(hash, WORDS):
+            print(e)
     end_time = time.time()
     print("time it takes for these tasks to run =", end_time - start_time)	
-    
+
+
+
     #for word in WORDS:
     #    print(hash(word))
     #---------------------------------------------------------------------------------------------------------
